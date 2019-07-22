@@ -5,7 +5,8 @@ const config = {
 	value: {
 		type: Number,
 		default: 0,
-		required: true
+		required: true,
+		max:255255255
 	},
 	timestamp: {
 		type: Date,
