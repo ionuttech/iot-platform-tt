@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const DeviceModel = mongoose.model('Device');
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports.createDevice = function(req, res) {
 	const name = req.body.name;
@@ -53,6 +56,25 @@ module.exports.updateDevice = function(req, res) {
 			res.status(200).send('Device Updated successfully');
 		} else {
 			res.status(400).send('Error while updating device');
+		}
+	});
+};
+
+module.exports.sendEmail = function(req, res) {
+	const deviceId = req.body.deviceId;
+	const date = new Date();
+	const formattedDate = date.toISOString();
+	const msg = {
+		to: 'ionut.morariu@techtalents.es',
+		from: 'test@example.com',
+		subject: 'Sending with Twilio SendGrid is Fun',
+		text: 'and easy to do anywhere, even with Node.js',
+		html: '<strong>and easy to do anywhere, even with Node.js</strong>'
+	};
+	sgMail.send(msg).then(function(message) {
+		console.log(message);
+		if (message) {
+			res.status(200).send('Email sent');
 		}
 	});
 };
